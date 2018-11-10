@@ -12,19 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: wso2apim-with-analytics-mysql-deployment
+  name: wso2apim-mysql-deployment
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        deployment: wso2apim-with-analytics-mysql
+        deployment: wso2apim-mysql
     spec:
       containers:
-      - name: wso2apim-with-analytics-mysql
+      - name: wso2apim-mysql
         image: mysql:5.7
         imagePullPolicy: IfNotPresent
         securityContext:
@@ -51,5 +51,5 @@ spec:
           name: mysql-dbscripts
       - name: apim-rdbms-persistent-storage
         persistentVolumeClaim:
-          claimName: wso2apim-with-analytics-rdbms-volume-claim
+          claimName: wso2apim-rdbms-volume-claim
       serviceAccountName: "wso2svc-account"

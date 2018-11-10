@@ -15,7 +15,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: wso2apim-with-analytics-apim-deployment-volume-claim
+  name: wso2apim-deployment-volume-claim
 spec:
   accessModes:
     - ReadWriteMany
@@ -25,4 +25,4 @@ spec:
   storageClassName: ""
   selector:
     matchLabels:
-      purpose: apim-shared-deployment
+      purpose: apim-repository-deployment-server

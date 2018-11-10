@@ -35,6 +35,26 @@ function usage () {
     echoBold "--cap | --cluster-admin-password\tKubernetes cluster admin password\n\n"
 }
 
+function create_mysql_server_storage () {
+    #Create folders required by the mysql PVC
+    if [ -d /mnt/mysql ]; then
+        sudo mv /mnt/mysql "/mnt/mysql.$(date +%s)"
+    fi
+    sudo mkdir -p /mnt/mysql
+    #Change the folder ownership to mysql server user.
+    sudo chown 999:999 /mnt/mysql
+}
+
+function create_apim_artifact_storage () {
+#Create folders required by the APIM GW PVC
+if [ -d /mnt/apim_repository_deployment_server ]; then
+            sudo mv /mnt/apim_repository_deployment_server "/mnt/apim_repository_deployment_server.$(date +%s)"
+fi
+#Create folders required by the APIM PVC
+sudo mkdir -p /mnt/apim_repository_deployment_server
+sudo chown 802:802 /mnt/apim_repository_deployment_server
+}
+
 WSO2_SUBSCRIPTION_USERNAME=''
 WSO2_SUBSCRIPTION_PASSWORD=''
 ADMIN_PASSWORD=''
@@ -77,34 +97,39 @@ ${KUBECTL} create serviceaccount wso2svc-account -n wso2
 ${KUBECTL} config set-context $(${KUBECTL} config current-context) --namespace=wso2
 
 # create a Kubernetes Secret for passing WSO2 Private Docker Registry credentials
-${KUBECTL} create secret docker-registry wso2creds --docker-server=docker.wso2.com --docker-username=${WSO2_SUBSCRIPTION_USERNAME} --docker-password=${WSO2_SUBSCRIPTION_PASSWORD} --docker-email=${WSO2_SUBSCRIPTION_USERNAME}
+#${KUBECTL} create secret docker-registry wso2creds --docker-server=docker.wso2.com --docker-username=${WSO2_SUBSCRIPTION_USERNAME} --docker-password=${WSO2_SUBSCRIPTION_PASSWORD} --docker-email=${WSO2_SUBSCRIPTION_USERNAME}
 
 # create Kubernetes Role and Role Binding necessary for the Kubernetes API requests made from Kubernetes membership scheme
-${KUBECTL} create --username=admin --password=${ADMIN_PASSWORD} -f ../../rbac/rbac.yaml
+#${KUBECTL} create --username=admin --password=${ADMIN_PASSWORD} -f ../../rbac/rbac.yaml
 
 echoBold 'Creating ConfigMaps...'
 ${KUBECTL} create configmap apim-conf --from-file=../confs/apim/
 ${KUBECTL} create configmap apim-conf-datasources --from-file=../confs/apim/datasources/
-${KUBECTL} create configmap apim-analytics-conf-worker --from-file=../confs/apim-analytics/conf/worker/
+#${KUBECTL} create configmap apim-analytics-conf-worker --from-file=../confs/apim-analytics/conf/worker/
 ${KUBECTL} create configmap mysql-dbscripts --from-file=../extras/confs/rdbms/mysql/dbscripts/
 
 # MySQL
 echoBold 'Deploying WSO2 API Manager Databases...'
+#Create folder for the mysql storage
+create_mysql_server_storage
 ${KUBECTL} create -f ../extras/rdbms/mysql/mysql-persistent-volume-claim.yaml
-${KUBECTL} create -f ../extras/rdbms/volumes/persistent-volumes.yaml
+#${KUBECTL} create -f ../extras/rdbms/volumes/persistent-volumes.yaml
+${KUBECTL} create -f ../extras/rdbms/volumes/mysql-persistent-volumes-local.yaml
 ${KUBECTL} create -f ../extras/rdbms/mysql/mysql-deployment.yaml
 ${KUBECTL} create -f ../extras/rdbms/mysql/mysql-service.yaml
 sleep 10s
 
-echoBold 'Deploying persistent storage resources...'
+#echoBold 'Deploying persistent storage resources...'
 ${KUBECTL} create -f ../volumes/persistent-volumes.yaml
 
-echoBold 'Deploying WSO2 API Manager Analytics...'
-${KUBECTL} create -f ../apim-analytics/wso2apim-analytics-deployment.yaml
-${KUBECTL} create -f ../apim-analytics/wso2apim-analytics-service.yaml
-sleep 200s
+#echoBold 'Deploying WSO2 API Manager Analytics...'
+#${KUBECTL} create -f ../apim-analytics/wso2apim-analytics-deployment.yaml
+#${KUBECTL} create -f ../apim-analytics/wso2apim-analytics-service.yaml
+#sleep 200s
 
 echoBold 'Deploying WSO2 API Manager...'
+#Create folder for the apim artifact storage
+create_apim_artifact_storage 
 ${KUBECTL} create -f ../apim/wso2apim-volume-claim.yaml
 ${KUBECTL} create -f ../apim/wso2apim-deployment.yaml
 ${KUBECTL} create -f ../apim/wso2apim-service.yaml
