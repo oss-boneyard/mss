@@ -15,7 +15,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: wso2apim-with-analytics-apim-ingress
+  name: wso2apim-ingress
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/ssl-passthrough: "true"
@@ -33,12 +33,12 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: wso2apim-with-analytics-apim-service
+          serviceName: wso2apim-service
           servicePort: 9443
   - host: wso2apim-gateway
     http:
       paths:
       - path: /
         backend:
-          serviceName: wso2apim-with-analytics-apim-service
+          serviceName: wso2apim-service
           servicePort: 8243
