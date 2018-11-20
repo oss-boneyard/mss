@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ex01-nodejs-deployment
+  labels:
+    app: ex01-nodejs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ex01-nodejs
+  template:
+    metadata:
+      labels:
+        app: ex01-nodejs
+    spec:
+      containers:
+      - name: ex01-nodejs
+        image: ossboneyard/ex01-nodejs
+        ports:
+        - containerPort: 8080
