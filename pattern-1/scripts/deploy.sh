@@ -136,7 +136,8 @@ ${KUBECTL} create -f ../apim/wso2apim-service.yaml
 sleep 10s
 
 echoBold 'Deploying Ingresses...'
-{KUBECTL} create -f ../ingresses/wso2apim-ingress.yaml
+${KUBECTL} create -f ../ingresses/wso2apim-ingress.yaml
 ${KUBECTL} create -f ../ingresses/mandatory.yaml
+${KUBECTL} create -f ../ingresses/service-nodeport.yaml
 
 echoBold 'Finished'
