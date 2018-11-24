@@ -117,10 +117,8 @@ ${KUBECTL} create -f ../extras/rdbms/mysql/mysql-persistent-volume-claim.yaml
 ${KUBECTL} create -f ../extras/rdbms/volumes/mysql-persistent-volumes-local.yaml
 ${KUBECTL} create -f ../extras/rdbms/mysql/mysql-deployment.yaml
 ${KUBECTL} create -f ../extras/rdbms/mysql/mysql-service.yaml
-sleep 10s
 
-#echoBold 'Deploying persistent storage resources...'
-${KUBECTL} create -f ../volumes/persistent-volumes.yaml
+sleep 10s
 
 #echoBold 'Deploying WSO2 API Manager Analytics...'
 #${KUBECTL} create -f ../apim-analytics/wso2apim-analytics-deployment.yaml
@@ -130,9 +128,11 @@ ${KUBECTL} create -f ../volumes/persistent-volumes.yaml
 echoBold 'Deploying WSO2 API Manager...'
 #Create folder for the apim artifact storage
 create_apim_artifact_storage 
+${KUBECTL} create -f ../volumes/apim-persistent-volumes-local.yaml
 ${KUBECTL} create -f ../apim/wso2apim-volume-claim.yaml
 ${KUBECTL} create -f ../apim/wso2apim-deployment.yaml
 ${KUBECTL} create -f ../apim/wso2apim-service.yaml
+
 sleep 10s
 
 echoBold 'Deploying Ingresses...'
