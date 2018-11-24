@@ -87,6 +87,9 @@ while [ "$1" != "" ]; do
     shift
 done
 
+HOST_NAME=$(hostname | tr '[:upper:]' '[:lower:]')
+${KUBECTL} label nodes $HOST_NAME disk=local
+
 # create a new Kubernetes Namespace
 ${KUBECTL} create namespace wso2
 

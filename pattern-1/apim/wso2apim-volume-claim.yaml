@@ -22,7 +22,7 @@ spec:
   resources:
     requests:
       storage: 1Gi
-  storageClassName: ""
+  storageClassName: local-storage
   selector:
     matchLabels:
       purpose: apim-repository-deployment-server

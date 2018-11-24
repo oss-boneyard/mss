@@ -22,7 +22,7 @@ spec:
   resources:
     requests:
       storage: 20Gi
-  storageClassName: ""
+  storageClassName: local-storage
   selector:
     matchLabels:
       purpose: apim-rdbms-data
