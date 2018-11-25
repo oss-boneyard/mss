@@ -19,7 +19,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    deployment: wso2apim-with-analytics-mysql
+    deployment: wso2apim-mysql
   ports:
   - name: mysql-port
     port: 3306

@@ -121,7 +121,7 @@ ${KUBECTL} create -f ../extras/rdbms/volumes/mysql-persistent-volumes-local.yaml
 ${KUBECTL} create -f ../extras/rdbms/mysql/mysql-deployment.yaml
 ${KUBECTL} create -f ../extras/rdbms/mysql/mysql-service.yaml
 
-sleep 10s
+sleep 60s
 
 #echoBold 'Deploying WSO2 API Manager Analytics...'
 #${KUBECTL} create -f ../apim-analytics/wso2apim-analytics-deployment.yaml
